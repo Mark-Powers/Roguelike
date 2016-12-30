@@ -160,7 +160,7 @@ public class Game {
 	}
 	
 	public boolean move(Actor a, int x, int y){
-		if(currentFloor.canMoveToSpace(x, y)){
+		if(currentFloor.canMoveToSpace(x, y) && !(x == player.pos.x && y == player.pos.y)){
 			a.pos.x = x;
 			a.pos.y = y;
 			currentFloor.move(x, y);

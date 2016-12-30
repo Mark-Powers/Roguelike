@@ -5,8 +5,6 @@ import java.util.Map;
 
 import model.items.MeleeWeapon;
 import model.items.RangeWeapon;
-import model.items.ShortBow;
-import model.items.Sword;
 import util.Roll;
 
 public class Player extends Actor {
@@ -29,8 +27,8 @@ public class Player extends Actor {
 		maxHealth = 20;
 		currentHealth = maxHealth;
 		
-		meleeWeapon = new Sword();
-		rangeWeapon = new ShortBow();
+		meleeWeapon = new MeleeWeapon("a sword", 0.9, 5);
+		rangeWeapon = new RangeWeapon("a short bow", .7, 5, 3);
 	}
 
 	public String getName() {
