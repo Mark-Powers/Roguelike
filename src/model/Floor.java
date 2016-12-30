@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import gui.CharMap;
 import util.Roll;
 
@@ -12,6 +14,8 @@ public class Floor {
 	private int width;
 	private int height;
 	private int[] map;
+	
+	private ArrayList<Actor> actors;	
 
 	public Floor(int w, int h, int playerX, int playerY) {
 		width = w;
@@ -20,7 +24,10 @@ public class Floor {
 		this.playerY = playerY;
 
 		map = new int[w * h];
-
+		actors = new ArrayList<Actor>();
+		actors.add(new Slime(10, 10));
+		actors.add(new Slime(15, 10));
+		
 		///generateDungeon();
 		generateTestMap();
 	}
@@ -189,6 +196,31 @@ public class Floor {
 		return map[y*width + x];
 	}
 
+	public boolean canMoveToSpace(int x, int y) {
+		return !isOccupied(x, y) && isPassable(x, y);
+	}
+	
+	public boolean isOccupied(int x, int y) {
+		return getActorAt(x, y) != null;
+	}
+	
+	public Actor getActorAt(int x, int y) {
+		for (Actor a : actors) {
+			if (a.pos.x == x && a.pos.y == y) {
+				return a;
+			}
+		}
+		return null;
+	}
+	
+	public void remove(Actor a){
+		actors.remove(a);
+	}
+	
+	public ArrayList<Actor> getActors(){
+		return actors;
+	}
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		int index;
@@ -198,6 +230,10 @@ public class Floor {
 				sb.append(CharMap.get(map[index]));
 			}
 			sb.append("\n");
+		}
+		for (Actor a : actors) {
+			index = (width + 1) * a.pos.y + a.pos.x;
+			sb.replace(index, index + 1, a.getChar());
 		}
 		return sb.toString();
 	}

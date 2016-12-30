@@ -13,7 +13,6 @@ public class Game {
 	final int startingY = 5;
 	
 	private Player player;
-	private List<Actor> actors;
 	private int lastKey;
 
 	private Dungeon dungeon;
@@ -25,10 +24,8 @@ public class Game {
 		dungeon = new Dungeon(3);
 		currentFloor = dungeon.getCurrentFloor();
 		
-		actors = new ArrayList<Actor>();
-		actors.add(player);
-		actors.add(new Slime(10, 10));
-		actors.add(new Slime(15, 10));
+		
+		
 		lastKey = -1;
 	}
 
@@ -36,25 +33,8 @@ public class Game {
 		return currentFloor.isPassable(x, y);
 	}
 
-	public boolean isOccupied(int x, int y) {
-		return getActorAt(x, y) != null;
-	}
-
-	public Actor getActorAt(int x, int y) {
-		for (Actor a : actors) {
-			if (a.pos.x == x && a.pos.y == y) {
-				return a;
-			}
-		}
-		return null;
-	}
-
-	public boolean canMoveToSpace(int x, int y) {
-		return !isOccupied(x, y) && isPassable(x, y);
-	}
-
 	public void tick() {
-		for (Actor a : actors) {
+		for (Actor a : currentFloor.getActors()) {
 			a.act(this);
 		}
 	}
@@ -72,7 +52,7 @@ public class Game {
 					if(currentFloor.isSolid(i, player.pos.y)){
 						break;
 					}
-					target = getActorAt(i, player.pos.y);
+					target = currentFloor.getActorAt(i, player.pos.y);
 					if (target != null) {
 						break;
 					}
@@ -82,7 +62,7 @@ public class Game {
 					if(currentFloor.isSolid(i, player.pos.y)){
 						break;
 					}
-					target = getActorAt(i, player.pos.y);
+					target = currentFloor.getActorAt(i, player.pos.y);
 					if (target != null) {
 						break;
 					}
@@ -92,7 +72,7 @@ public class Game {
 					if(currentFloor.isSolid(player.pos.x, i)){
 						break;
 					}
-					target = getActorAt(player.pos.x, i);
+					target = currentFloor.getActorAt(player.pos.x, i);
 					if (target != null) {
 						break;
 					}
@@ -102,7 +82,7 @@ public class Game {
 					if(currentFloor.isSolid(player.pos.x, i)){
 						break;
 					}
-					target = getActorAt(player.pos.x, i);
+					target = currentFloor.getActorAt(player.pos.x, i);
 					if (target != null) {
 						break;
 					}
@@ -112,7 +92,7 @@ public class Game {
 				if (Math.abs(Point.distance(player.pos, target.pos)) <= player.rangeWeapon.getRange()) {
 					boolean wasKilled = player.rangeAttack(target);
 					if (wasKilled) {
-						actors.remove(target);
+						currentFloor.remove(target);
 						Log.add(String.format("%s shot %s with %s.", player.getName(), target.getName(),
 								player.rangeWeapon.getName()));
 					}
@@ -127,18 +107,18 @@ public class Game {
 		} else if (lastKey == KeyBind.ATTACK) {
 			Actor target = null;
 			if (keycode == KeyBind.LEFT) {
-				target = getActorAt(player.pos.x - 1, player.pos.y);
+				target = currentFloor.getActorAt(player.pos.x - 1, player.pos.y);
 			} else if (keycode == KeyBind.RIGHT) {
-				target = getActorAt(player.pos.x + 1, player.pos.y);
+				target = currentFloor.getActorAt(player.pos.x + 1, player.pos.y);
 			} else if (keycode == KeyBind.UP) {
-				target = getActorAt(player.pos.x, player.pos.y - 1);
+				target = currentFloor.getActorAt(player.pos.x, player.pos.y - 1);
 			} else if (keycode == KeyBind.DOWN) {
-				target = getActorAt(player.pos.x, player.pos.y + 1);
+				target = currentFloor.getActorAt(player.pos.x, player.pos.y + 1);
 			}
 			if (target != null) {
 				boolean wasKilled = player.attack(target);
 				if (wasKilled) {
-					actors.remove(target);
+					currentFloor.remove(target);
 					Log.add(String.format("%s killed %s with %s.", player.getName(), target.getName(),
 							player.meleeWeapon.getName()));
 				}
@@ -180,7 +160,7 @@ public class Game {
 	}
 	
 	public boolean move(Actor a, int x, int y){
-		if(canMoveToSpace(x, y)){
+		if(currentFloor.canMoveToSpace(x, y)){
 			a.pos.x = x;
 			a.pos.y = y;
 			currentFloor.move(x, y);
@@ -202,10 +182,10 @@ public class Game {
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer(currentFloor.toString());
-		for (Actor a : actors) {
-			int index = (WIDTH + 1) * a.pos.y + a.pos.x;
-			sb.replace(index, index + 1, a.getChar());
-		}
+		
+		int index = (WIDTH + 1) * player.pos.y + player.pos.x;
+		sb.replace(index, index + 1, player.getChar());
+		
 		return sb.toString();
 	}
 }
