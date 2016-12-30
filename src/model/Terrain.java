@@ -10,6 +10,8 @@ public class Terrain {
 	public static final int WALL = 2;
 	public static final int DOOR = 3;
 	public static final int OPEN_DOOR = 4;
+	public static final int STAIR_DOWN = 5;
+	public static final int STAIR_UP = 6;
 
 	public static final int PASSABLE = 0x01;
 	public static final int AVOID = 0x02;
@@ -23,5 +25,7 @@ public class Terrain {
 		flags[WALL] = SOLID;
 		flags[DOOR] = PASSABLE | SOLID;
 		flags[OPEN_DOOR] = PASSABLE;
+		flags[STAIR_DOWN] = PASSABLE;
+		flags[STAIR_UP] = PASSABLE;
 	}
 }

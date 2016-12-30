@@ -11,9 +11,13 @@ public class CharMap {
 			case Terrain.WALL:
 				return '█';
 			case Terrain.DOOR:
-				return 'd';
-			case Terrain.OPEN_DOOR:
 				return 'D';
+			case Terrain.OPEN_DOOR:
+				return 'd';
+			case Terrain.STAIR_DOWN:
+				return '↓';
+			case Terrain.STAIR_UP:
+				return '↑';
 			default:
 				return 0;
 		}

@@ -3,7 +3,7 @@ package model;
 import gui.CharMap;
 import util.Roll;
 
-public class Map {
+public class Floor {
 	private final int MIN_HEIGHT = 5;
 	private final int MIN_WIDTH = 5;
 	private int playerX;
@@ -13,7 +13,7 @@ public class Map {
 	private int height;
 	private int[] map;
 
-	public Map(int w, int h, int playerX, int playerY) {
+	public Floor(int w, int h, int playerX, int playerY) {
 		width = w;
 		height = h;
 		this.playerX = playerX;
@@ -21,8 +21,8 @@ public class Map {
 
 		map = new int[w * h];
 
-		generateDungeon();
-		// generateSquareMap();
+		///generateDungeon();
+		generateTestMap();
 	}
 
 	private void generateDungeon() {
@@ -127,7 +127,10 @@ public class Map {
 		}
 	}
 
-	private void generateSquareMap() {
+	/**
+	 * A simple map to test mechanics
+	 */
+	private void generateTestMap() {
 		int index;
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
@@ -139,14 +142,51 @@ public class Map {
 				}
 			}
 		}
+		
+		for(int i = 0; i < 8; i++){
+			map[5 + i + 12 * width] = Terrain.WALL;
+		}
+		map[5 + 11 * width] = Terrain.WALL;
+		map[5 + 10 * width] = Terrain.DOOR;
+		map[5 + 9 * width] = Terrain.WALL;
+		for(int i = 0; i < 8; i++){
+			map[5 + i + 8 * width] = Terrain.WALL;
+		}
+		map[12 + 11 * width] = Terrain.WALL;
+		map[12 + 10 * width] = Terrain.DOOR;
+		map[12 + 9 * width] = Terrain.WALL;
+		
+		map[10 + 5*width] = Terrain.STAIR_DOWN;
+		map[10 + 7*width] = Terrain.STAIR_UP;
 	}
 
+	/**
+	 * Updates map based on movement.
+	 * i.e. Opens doors, sets traps
+	 * @param x
+	 * @param y
+	 */
+	public void move(int x, int y){
+		int index = x+y*width;
+		if(map[index] == Terrain.DOOR){
+			map[index] = Terrain.OPEN_DOOR;
+		}
+	}
+	
 	public boolean isPassable(int x, int y) {
 		return (Terrain.flags[map[y * width + x]] & Terrain.PASSABLE) != 0;
 	}
 	
 	public boolean isSolid(int x, int y){
 		return (Terrain.flags[map[y*width + x]] & Terrain.SOLID) != 0;
+	}
+	
+	public boolean isAvoid(int x, int y){
+		return (Terrain.flags[map[y*width + x]] & Terrain.AVOID) != 0;
+	}
+	
+	public int getTile(int x, int y){
+		return map[y*width + x];
 	}
 
 	public String toString() {

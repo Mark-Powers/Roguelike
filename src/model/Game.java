@@ -11,16 +11,20 @@ public class Game {
 	final int HEIGHT = 20;
 	final int startingX = 5;
 	final int startingY = 5;
-
+	
 	private Player player;
 	private List<Actor> actors;
 	private int lastKey;
 
-	private Map map;
+	private Dungeon dungeon;
+	private Floor currentFloor;
 
 	public Game() {
 		player = new Player("Mark", startingX, startingY);
-		map = new Map(WIDTH, HEIGHT, startingX, startingY);
+		
+		dungeon = new Dungeon(3);
+		currentFloor = dungeon.getCurrentFloor();
+		
 		actors = new ArrayList<Actor>();
 		actors.add(player);
 		actors.add(new Slime(10, 10));
@@ -29,7 +33,7 @@ public class Game {
 	}
 
 	public boolean isPassable(int x, int y) {
-		return map.isPassable(x, y);
+		return currentFloor.isPassable(x, y);
 	}
 
 	public boolean isOccupied(int x, int y) {
@@ -65,7 +69,7 @@ public class Game {
 			Actor target = null;
 			if (keycode == KeyBind.LEFT) {
 				for (int i = player.pos.x - 1; i >= 0; i--) {
-					if(map.isSolid(i, player.pos.y)){
+					if(currentFloor.isSolid(i, player.pos.y)){
 						break;
 					}
 					target = getActorAt(i, player.pos.y);
@@ -75,7 +79,7 @@ public class Game {
 				}
 			} else if (keycode == KeyBind.RIGHT) {
 				for (int i = player.pos.x + 1; i < WIDTH; i++) {
-					if(map.isSolid(i, player.pos.y)){
+					if(currentFloor.isSolid(i, player.pos.y)){
 						break;
 					}
 					target = getActorAt(i, player.pos.y);
@@ -85,7 +89,7 @@ public class Game {
 				}
 			} else if (keycode == KeyBind.UP) {
 				for (int i = player.pos.y - 1; i >= 0; i--) {
-					if(map.isSolid(player.pos.x, i)){
+					if(currentFloor.isSolid(player.pos.x, i)){
 						break;
 					}
 					target = getActorAt(player.pos.x, i);
@@ -95,7 +99,7 @@ public class Game {
 				}
 			} else if (keycode == KeyBind.DOWN) {
 				for (int i = player.pos.y + 1; i < HEIGHT; i++) {
-					if(map.isSolid(player.pos.x, i)){
+					if(currentFloor.isSolid(player.pos.x, i)){
 						break;
 					}
 					target = getActorAt(player.pos.x, i);
@@ -144,21 +148,13 @@ public class Game {
 			}
 		} else {
 			if (keycode == KeyBind.LEFT) {
-				if (canMoveToSpace(player.pos.x - 1, player.pos.y)) {
-					player.pos.x--;
-				}
+				move(player, player.pos.x - 1, player.pos.y);
 			} else if (keycode == KeyBind.RIGHT) {
-				if (canMoveToSpace(player.pos.x + 1, player.pos.y)) {
-					player.pos.x++;
-				}
+				move(player, player.pos.x + 1, player.pos.y);
 			} else if (keycode == KeyBind.UP) {
-				if (canMoveToSpace(player.pos.x, player.pos.y - 1)) {
-					player.pos.y--;
-				}
+				move(player, player.pos.x, player.pos.y - 1);
 			} else if (keycode == KeyBind.DOWN) {
-				if (canMoveToSpace(player.pos.x, player.pos.y + 1)) {
-					player.pos.y++;
-				}
+				move(player, player.pos.x, player.pos.y + 1);
 			} else if (keycode == KeyBind.ATTACK) {
 				if (player.meleeWeapon != null) {
 					Log.add("Choose a direction to attack");
@@ -182,9 +178,30 @@ public class Game {
 		lastKey = keycode;
 		return turnComplete;
 	}
+	
+	public boolean move(Actor a, int x, int y){
+		if(canMoveToSpace(x, y)){
+			a.pos.x = x;
+			a.pos.y = y;
+			currentFloor.move(x, y);
+			if(currentFloor.getTile(x, y) == Terrain.STAIR_DOWN){
+				if(dungeon.nextFloor()){
+					currentFloor = dungeon.getCurrentFloor();
+					Log.add(String.format("You move down to floor %d", dungeon.getCurrentFloorNumber()));
+				}
+			} else if(currentFloor.getTile(x, y) == Terrain.STAIR_UP){
+				if(dungeon.prevFloor()){
+					currentFloor = dungeon.getCurrentFloor();
+					Log.add(String.format("You move up to floor %d", dungeon.getCurrentFloorNumber()));
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer(map.toString());
+		StringBuffer sb = new StringBuffer(currentFloor.toString());
 		for (Actor a : actors) {
 			int index = (WIDTH + 1) * a.pos.y + a.pos.x;
 			sb.replace(index, index + 1, a.getChar());

@@ -28,24 +28,16 @@ public class Slime extends Actor {
 		}
 		switch (roll) {
 			case 1:
-				if (game.canMoveToSpace(pos.x + 1, pos.y)) {
-					pos.x++;
-				}
+				game.move(this, pos.x + 1, pos.y);
 				break;
 			case 2:
-				if (game.canMoveToSpace(pos.x - 1, pos.y)) {
-					pos.x--;
-				}
+				game.move(this, pos.x - 1, pos.y);
 				break;
 			case 3:
-				if (game.canMoveToSpace(pos.x, pos.y + 1)) {
-					pos.y++;
-				}
+				game.move(this, pos.x, pos.y + 1);
 				break;
 			case 4:
-				if (game.canMoveToSpace(pos.x, pos.y - 1)) {
-					pos.y--;
-				}
+				game.move(this, pos.x, pos.y - 1);
 				break;
 		}
 		lastRoll = roll;
