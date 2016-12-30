@@ -5,9 +5,9 @@ public class CharMap {
 	public static final char get(int i){
 		switch(i){
 			case Terrain.CHASM:
-				return '.';
-			case Terrain.EMPTY:
 				return ' ';
+			case Terrain.EMPTY:
+				return '.';
 			case Terrain.WALL:
 				return '█';
 			case Terrain.DOOR:

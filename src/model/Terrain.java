@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * Inspired by the Pixel Dungeon Terrain class
+ * https://github.com/watabou/pixel-dungeon
+ */
 public class Terrain {
 	public static final int CHASM = 0;
 	public static final int EMPTY = 1;

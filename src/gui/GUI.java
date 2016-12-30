@@ -10,12 +10,15 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.text.JTextComponent.KeyBinding;
+
 import model.Game;
+import model.KeyBind;
 import model.Log;
 
 public class GUI extends Frame{
-	final int WIDTH = 1000;
-	final int HEIGHT = 800;
+	final int WIDTH = 800;
+	final int HEIGHT = 680;
 	final int FONT_SIZE = 20;
 	final int LOG_COUNT = 10;
 	
@@ -54,21 +57,9 @@ public class GUI extends Frame{
 			
 			@Override
 			public void keyPressed(KeyEvent e) {
-				switch(e.getKeyCode()){
-					case 37:
-						game.movePlayerLeft();
-						break;
-					case 38:
-						game.movePlayerUp();
-						break;
-					case 39:
-						game.movePlayerRight();
-						break;
-					case 40:
-						game.movePlayerDown();
-						break;
+				if(game.keyEvent(e.getKeyCode())){
+					game.tick();
 				}
-				game.tick();
 				console.setText(game.toString());
 			}
 		});
@@ -88,7 +79,7 @@ public class GUI extends Frame{
 			this.width = width;
 			this.height = height;
 			setSize(width, height);
-			setBackground(Color.LIGHT_GRAY);
+			setBackground(Color.WHITE);
 			text = "";
 		}
 
@@ -116,7 +107,7 @@ public class GUI extends Frame{
 				}
 			}
 			// Log outline
-			g.drawRect(8, 10+lines.length*FONT_SIZE, (int)(width*.8), FONT_SIZE*LOG_COUNT+4);
+			g.drawRect(8, 10+lines.length*FONT_SIZE, width-30, FONT_SIZE*LOG_COUNT+4);
 			
 		}
 	}

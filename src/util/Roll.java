@@ -9,6 +9,13 @@ public final class Roll {
 		return r.nextInt(sides)+1;
 	}
 	
+	public static int between(int min, int max){
+		if(min < max){
+			return d(max-min)+min;
+		}
+		return min;
+	}
+	
 	public static int stat(){
 		int sum = 0;
 		int min = Integer.MAX_VALUE;

@@ -5,8 +5,6 @@ import java.util.Map;
 import util.Roll;
 
 public class Player extends Actor {
-	private int x;
-	private int y;
 	private String name;
 	private Map<Stat, Double> stat;
 	
@@ -32,7 +30,15 @@ public class Player extends Actor {
 
 	@Override
 	public void act(Game game) {
-		// TODO Auto-generated method stub
-		
+		// Player passive effects here
+	}
+
+	@Override
+	public boolean attack(Actor target) {
+		if(target instanceof Slime){ // Player instantly kills slimes.
+			target.currentHealth = 0;
+			return true;
+		}
+		return false;
 	}
 }

@@ -16,6 +16,8 @@ public abstract class Actor {
 	}
 	
 	public abstract void act(Game game);
+	public abstract boolean attack(Actor target);
+	public abstract String getName();
 	
 	public abstract String getChar();
 }
