@@ -7,6 +7,9 @@ public class Slime extends Actor {
 	public Slime(int x, int y) {
 		super(x, y);
 		lastRoll = -1;
+		
+		maxHealth = 10;
+		currentHealth = maxHealth;
 	}
 
 	@Override
@@ -46,11 +49,6 @@ public class Slime extends Actor {
 				break;
 		}
 		lastRoll = roll;
-	}
-
-	@Override
-	public boolean attack(Actor target) {
-		return false;
 	}
 
 	@Override

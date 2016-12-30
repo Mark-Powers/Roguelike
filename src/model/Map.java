@@ -1,13 +1,11 @@
 package model;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
-
 import gui.CharMap;
 import util.Roll;
 
 public class Map {
-	private final int MIN_HEIGHT = 7;
-	private final int MIN_WIDTH = 7;
+	private final int MIN_HEIGHT = 5;
+	private final int MIN_WIDTH = 5;
 	private int playerX;
 	private int playerY;
 	
@@ -145,6 +143,10 @@ public class Map {
 
 	public boolean isPassable(int x, int y) {
 		return (Terrain.flags[map[y * width + x]] & Terrain.PASSABLE) != 0;
+	}
+	
+	public boolean isSolid(int x, int y){
+		return (Terrain.flags[map[y*width + x]] & Terrain.SOLID) != 0;
 	}
 
 	public String toString() {

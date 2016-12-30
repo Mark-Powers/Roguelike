@@ -79,7 +79,7 @@ public class GUI extends Frame{
 			this.width = width;
 			this.height = height;
 			setSize(width, height);
-			setBackground(Color.WHITE);
+			setBackground(new Color(224,224,224));
 			text = "";
 		}
 
@@ -89,9 +89,8 @@ public class GUI extends Frame{
 		}
 
 		public void paint(Graphics g) {
-			g.setColor(Color.BLACK);
 			g.setFont(new Font("Courier New", Font.PLAIN, FONT_SIZE));
-			
+			g.setColor(new Color(16,16,16));
 			//Draws map
 			String[] lines = text.split("\n");
 			for(int i = 0; i < lines.length; i++){
