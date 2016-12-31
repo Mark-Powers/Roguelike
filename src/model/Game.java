@@ -1,5 +1,7 @@
 package model;
 
+import model.actors.Actor;
+import model.actors.Player;
 import model.items.DroppedItem;
 import model.items.Item;
 import model.items.MeleeWeapon;
@@ -230,6 +232,7 @@ public class Game {
 			a.pos.x = x;
 			a.pos.y = y;
 			currentFloor.move(x, y);
+			// TODO, this shouldn't be here, will trigger if enemy goes on steps
 			if (currentFloor.getTile(x, y) == Terrain.STAIR_DOWN) {
 				if (dungeon.nextFloor()) {
 					currentFloor = dungeon.getCurrentFloor();
@@ -246,6 +249,10 @@ public class Game {
 		return false;
 	}
 
+	public Player getPlayer(){
+		return player;
+	}
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer(currentFloor.toString());
 

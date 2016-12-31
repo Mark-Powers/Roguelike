@@ -1,6 +1,8 @@
-package model;
+package model.actors;
 import java.util.HashMap;
 
+import model.Game;
+import model.Stat;
 import util.Point;
 
 public abstract class Actor {

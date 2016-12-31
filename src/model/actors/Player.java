@@ -1,8 +1,11 @@
-package model;
+package model.actors;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import model.Game;
+import model.Log;
+import model.Stat;
 import model.items.Item;
 import model.items.MeleeWeapon;
 import model.items.RangeWeapon;

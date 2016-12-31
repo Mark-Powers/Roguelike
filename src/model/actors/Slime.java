@@ -1,4 +1,5 @@
-package model;
+package model.actors;
+import model.Game;
 import util.Roll;
 
 public class Slime extends Actor {

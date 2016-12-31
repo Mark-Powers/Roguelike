@@ -3,7 +3,13 @@ package model;
 import java.util.ArrayList;
 
 import gui.CharMap;
+import model.actors.Actor;
+import model.actors.Slime;
+import model.actors.Zombie;
 import model.items.DroppedItem;
+import model.items.MeleeWeapon;
+import model.items.Potion;
+import util.Point;
 import util.Roll;
 
 public class Floor {
@@ -26,13 +32,9 @@ public class Floor {
 		this.playerY = playerY;
 
 		map = new int[w * h];
-		actors = new ArrayList<Actor>();
-		actors.add(new Slime(10, 10));
-		actors.add(new Slime(15, 10));
-		
+		actors = new ArrayList<Actor>();		
 		items = new ArrayList<DroppedItem>();
 		
-		///generateDungeon();
 		generateTestMap();
 	}
 
@@ -169,6 +171,13 @@ public class Floor {
 		
 		map[10 + 5*width] = Terrain.STAIR_DOWN;
 		map[12 + 5*width] = Terrain.STAIR_UP;
+		
+		actors.add(new Slime(10, 10));
+		actors.add(new Slime(15, 10));
+		actors.add(new Zombie(15, 8));
+		
+		items.add(new DroppedItem(new Potion(), new Point(20, 5)));
+		items.add(new DroppedItem(new MeleeWeapon("a staff", 1, 3), new Point(5, 15)));
 	}
 
 	public void addItem(DroppedItem i){
