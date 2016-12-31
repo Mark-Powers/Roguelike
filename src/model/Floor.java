@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 import gui.CharMap;
+import model.items.DroppedItem;
 import util.Roll;
 
 public class Floor {
@@ -16,6 +17,7 @@ public class Floor {
 	private int[] map;
 	
 	private ArrayList<Actor> actors;
+	private ArrayList<DroppedItem> items;
 
 	public Floor(int w, int h, int playerX, int playerY) {
 		width = w;
@@ -27,6 +29,8 @@ public class Floor {
 		actors = new ArrayList<Actor>();
 		actors.add(new Slime(10, 10));
 		actors.add(new Slime(15, 10));
+		
+		items = new ArrayList<DroppedItem>();
 		
 		///generateDungeon();
 		generateTestMap();
@@ -167,11 +171,23 @@ public class Floor {
 		map[12 + 5*width] = Terrain.STAIR_UP;
 	}
 
+	public void addItem(DroppedItem i){
+		items.add(i);
+	}
+	
+	public DroppedItem removeItem(int x, int y){
+		for(int index = 0; index < items.size(); index++){
+			DroppedItem i = items.get(index);
+			if(i.pos.x == x && i.pos.y == y){
+				return items.remove(index);
+			}
+		}
+		return null;		
+	}
+	
 	/**
 	 * Updates map based on movement.
 	 * i.e. Opens doors, sets traps
-	 * @param x
-	 * @param y
 	 */
 	public void move(int x, int y){
 		int index = x+y*width;
@@ -234,6 +250,10 @@ public class Floor {
 		for (Actor a : actors) {
 			index = (width + 1) * a.pos.y + a.pos.x;
 			sb.replace(index, index + 1, a.getChar());
+		}
+		for (DroppedItem i : items) {
+			index = (width + 1) * i.pos.y + i.pos.x;
+			sb.replace(index, index + 1, i.item.getChar());
 		}
 		return sb.toString();
 	}

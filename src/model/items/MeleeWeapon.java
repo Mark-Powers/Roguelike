@@ -23,4 +23,9 @@ public class MeleeWeapon implements Item {
 	public double getAccuracy(){
 		return accuracy;
 	}
+
+	@Override
+	public String getChar() {
+		return "M";
+	}
 }

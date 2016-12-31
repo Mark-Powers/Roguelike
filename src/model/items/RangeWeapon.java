@@ -29,4 +29,9 @@ public class RangeWeapon implements Item {
 	public double getAccuracy() {
 		return accuracy;
 	}
+
+	@Override
+	public String getChar() {
+		return "R";
+	}
 }

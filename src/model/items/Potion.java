@@ -7,4 +7,9 @@ public class Potion implements Item {
 		return "a useless potion";
 	}
 
+	@Override
+	public String getChar() {
+		return "P";
+	}
+
 }

@@ -1,14 +1,10 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.print.attribute.standard.MediaPrintableArea;
-
+import model.items.DroppedItem;
+import model.items.Item;
 import model.items.MeleeWeapon;
 import model.items.Potion;
 import util.Point;
-import util.Roll;
 import util.Utilities;
 
 public class Game {
@@ -60,7 +56,6 @@ public class Game {
 		} else if(lastKey == KeyBind.DROP_ITEM){
 			lastKey = -1;
 			return dropItem(keycode);
-			
 		} else {
 			switch (keycode) {
 			case KeyBind.LEFT:
@@ -103,6 +98,16 @@ public class Game {
 				Log.add("Choose item to drop");
 				turnComplete = false;
 				break;
+			case KeyBind.PICK_UP_ITEM:
+				DroppedItem pickedUpItem = currentFloor.removeItem(player.pos.x, player.pos.y);
+				if(pickedUpItem != null){
+					Log.add(String.format("Picked up a %s.", pickedUpItem.item.getName()));
+					player.addItem(pickedUpItem.item);
+				} else {
+					Log.add("Nothing to pick up.");
+					turnComplete = false;
+				}
+				break;
 			}
 		}
 		lastKey = keycode;
@@ -112,8 +117,9 @@ public class Game {
 	private boolean dropItem(int keycode) {
 		int index = KeyBind.getNumberKeyValue(keycode)-1; // - 1 since index starts at 1
 		String[] inventory = player.getInventory();
-		if(index > 0 && index < inventory.length){
-			player.dropItem(inventory[index]);
+		if(index >= 0 && index < inventory.length){
+			Item dropped = player.dropItem(inventory[index]);
+			currentFloor.addItem(new DroppedItem(dropped, new Point(player.pos.x, player.pos.y)));
 			return true;
 		}
 		Log.add("Invalid item number");

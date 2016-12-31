@@ -1,6 +1,6 @@
 package model.items;
 
 public interface Item {
-	public abstract String getName();
-	
+	public String getName();
+	public String getChar();
 }

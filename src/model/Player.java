@@ -48,7 +48,7 @@ public class Player extends Actor {
 	}
 	
 	public Item dropItem(String s){
-		for(int i =0; i < inventory.size(); i++){
+		for(int i = 0; i < inventory.size(); i++){
 			if(inventory.get(i).getName() == s){
 				Log.add(String.format("You dropped %s.", s));
 				return inventory.remove(i);
