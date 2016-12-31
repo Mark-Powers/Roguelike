@@ -52,9 +52,15 @@ public class Game {
 			Log.add("Cancelled");
 			turnComplete = false;
 		} else if (lastKey == KeyBind.RANGE) {
-			turnComplete = rangeAttack(keycode, turnComplete);
+			lastKey = -1;
+			return rangeAttack(keycode);
 		} else if (lastKey == KeyBind.ATTACK) {
-			turnComplete = attack(keycode, turnComplete);
+			lastKey = -1;
+			return attack(keycode);
+		} else if(lastKey == KeyBind.DROP_ITEM){
+			lastKey = -1;
+			return dropItem(keycode);
+			
 		} else {
 			switch (keycode) {
 			case KeyBind.LEFT:
@@ -94,12 +100,24 @@ public class Game {
 				turnComplete = false;
 				break;
 			case KeyBind.DROP_ITEM:
-				
+				Log.add("Choose item to drop");
+				turnComplete = false;
 				break;
 			}
 		}
 		lastKey = keycode;
 		return turnComplete;
+	}
+
+	private boolean dropItem(int keycode) {
+		int index = KeyBind.getNumberKeyValue(keycode)-1; // - 1 since index starts at 1
+		String[] inventory = player.getInventory();
+		if(index > 0 && index < inventory.length){
+			player.dropItem(inventory[index]);
+			return true;
+		}
+		Log.add("Invalid item number");
+		return false;
 	}
 
 	private void logInventory() {
@@ -112,7 +130,8 @@ public class Game {
 		}
 	}
 
-	private boolean rangeAttack(int keycode, boolean turnComplete) {
+	private boolean rangeAttack(int keycode) {
+		boolean turnComplete = true;
 		Actor target = null;
 		if (keycode == KeyBind.LEFT) {
 			for (int i = player.pos.x - 1; i >= 0; i--) {
@@ -174,7 +193,8 @@ public class Game {
 		return turnComplete;
 	}
 
-	private boolean attack(int keycode, boolean turnComplete) {
+	private boolean attack(int keycode) {
+		boolean turnComplete = true;
 		Actor target = null;
 		if (keycode == KeyBind.LEFT) {
 			target = currentFloor.getActorAt(player.pos.x - 1, player.pos.y);

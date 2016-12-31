@@ -5,28 +5,28 @@ public class RangeWeapon implements Item {
 	protected int range;
 	protected int damage;
 	protected String name;
-	
+
 	public RangeWeapon(String n, double a, int r, int d) {
 		name = n;
 		accuracy = a;
 		range = r;
-		damage =d;
+		damage = d;
 	}
-	
+
 	@Override
-	public String getName(){
+	public String getName() {
 		return name;
 	}
-	
-	public int getDamage(){
+
+	public int getDamage() {
 		return damage;
 	}
-	
-	public int getRange(){
+
+	public int getRange() {
 		return range;
 	}
-	
-	public double getAccuracy(){
+
+	public double getAccuracy() {
 		return accuracy;
 	}
 }
