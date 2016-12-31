@@ -1,13 +1,11 @@
 package model;
 import java.util.HashMap;
-import java.util.Map;
 
 import util.Point;
-import util.Roll;
 
 public abstract class Actor {
 	public Point pos;
-	protected Map<Stat, Double> stat;
+	protected HashMap<Stat, Double> stat;
 	protected int maxHealth;
 	protected int currentHealth;
 	

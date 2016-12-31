@@ -15,7 +15,7 @@ public class Floor {
 	private int height;
 	private int[] map;
 	
-	private ArrayList<Actor> actors;	
+	private ArrayList<Actor> actors;
 
 	public Floor(int w, int h, int playerX, int playerY) {
 		width = w;
@@ -164,7 +164,7 @@ public class Floor {
 		map[12 + 9 * width] = Terrain.WALL;
 		
 		map[10 + 5*width] = Terrain.STAIR_DOWN;
-		map[10 + 7*width] = Terrain.STAIR_UP;
+		map[12 + 5*width] = Terrain.STAIR_UP;
 	}
 
 	/**
