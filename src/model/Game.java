@@ -58,6 +58,10 @@ public class Game {
 		} else if (lastKey == KeyBind.DROP_ITEM) {
 			lastKey = -1;
 			return dropItem(keycode);
+		} else if (lastKey == KeyBind.LOOK){
+			lastKey = -1;
+			inspect(Direction.keyToDirection(keycode));
+			return false;
 		} else {
 			switch (keycode) {
 			case KeyBind.LEFT:
@@ -122,6 +126,14 @@ public class Game {
 					turnComplete = false;
 				}
 				break;
+			case KeyBind.LOOK:
+				Item atFeet = currentFloor.getItemAt(player.pos.x, player.pos.y);
+				if(atFeet != null){
+					Log.add(String.format("At your feet lies %s.", atFeet.getName()));
+				}
+				Log.add("Choose a direction to look");
+				turnComplete = false;
+				break;
 			}
 		}
 		lastKey = keycode;
@@ -151,6 +163,53 @@ public class Game {
 		}
 	}
 
+	private void inspect(int direction){
+		switch(direction){
+			case Direction.NORTH:
+				for (int i = player.pos.y - 1; i >= 0; i--) {
+					if(look(player.pos.x, i)){
+						break;
+					}
+				}
+				break;
+			case Direction.EAST:
+				for (int i = player.pos.x + 1; i < WIDTH; i++) {
+					if(look(i, player.pos.y)){
+						break;
+					}
+				}
+				break;
+			case Direction.SOUTH:
+				for (int i = player.pos.y + 1; i < WIDTH; i++) {
+					if(look(player.pos.x, i)){
+						break;
+					}
+				}
+				break;
+			case Direction.WEST:
+				for (int i = player.pos.x - 1; i >= 0; i--) {
+					if(look(i, player.pos.y)){
+						break;
+					}
+				}
+				break;
+		}
+	}
+	
+	private boolean look(int x, int y){
+		Actor actorInSight = currentFloor.getActorAt(x, y);
+		if(actorInSight != null){
+			Log.add(String.format("You see %s.", actorInSight.getName()));
+			return true;
+		}
+		Item itemInSight = currentFloor.getItemAt(x, y);
+		if(itemInSight != null){
+			Log.add(String.format("You see %s.", itemInSight.getName()));
+			return true;
+		}
+		return false;
+	}
+	
 	private boolean rangeAttack(int keycode) {
 		boolean turnComplete = true;
 		Actor target = null;

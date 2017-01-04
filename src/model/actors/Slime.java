@@ -1,5 +1,6 @@
 package model.actors;
 
+import model.Direction;
 import model.Game;
 import util.Roll;
 
@@ -24,29 +25,29 @@ public class Slime extends Actor {
 		// 33% chance to move randomly
 		// 33% chance to move last direction again
 		// 33% chance to stay still
-		int roll = Roll.d(12);
-		if (roll > 8) {
+		int roll = Roll.d(12)-1;
+		if (roll >= 8) {
 			roll = lastRoll;
 		}
 		switch (roll) {
-		case 1:
+		case Direction.NORTH:
+			if (game.canMove(this, pos.x, pos.y - 1)) {
+				game.move(this, pos.x, pos.y - 1);
+			}
+			break;
+		case Direction.EAST:
 			if (game.canMove(this, pos.x + 1, pos.y)) {
 				game.move(this, pos.x + 1, pos.y);
 			}
 			break;
-		case 2:
-			if (game.canMove(this, pos.x - 1, pos.y)) {
-				game.move(this, pos.x - 1, pos.y);
-			}
-			break;
-		case 3:
+		case Direction.SOUTH:
 			if (game.canMove(this, pos.x, pos.y + 1)) {
 				game.move(this, pos.x, pos.y + 1);
 			}
 			break;
-		case 4:
-			if (game.canMove(this, pos.x, pos.y - 1)) {
-				game.move(this, pos.x, pos.y - 1);
+		case Direction.WEST:
+			if (game.canMove(this, pos.x - 1, pos.y)) {
+				game.move(this, pos.x - 1, pos.y);
 			}
 			break;
 		}

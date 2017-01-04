@@ -12,6 +12,7 @@ public class KeyBind {
 	public static final int ATTACK = 65; // a
 	public static final int RANGE = 82; // r
 	
+	public static final int LOOK = 76; // l
 	public static final int INVENTORY = 73; // i
 	public static final int DROP_ITEM = 68; // d
 	public static final int PICK_UP_ITEM = 80; // p

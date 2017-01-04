@@ -7,6 +7,7 @@ import model.actors.Actor;
 import model.actors.Slime;
 import model.actors.Zombie;
 import model.items.DroppedItem;
+import model.items.Item;
 import model.items.MeleeWeapon;
 import model.items.Potion;
 import util.Point;
@@ -182,6 +183,15 @@ public class Floor {
 
 	public void addItem(DroppedItem i){
 		items.add(i);
+	}
+	
+	public Item getItemAt(int x, int y){
+		for (DroppedItem i : items) {
+			if (i.pos.x == x && i.pos.y == y) {
+				return i.item;
+			}
+		}
+		return null;
 	}
 	
 	public DroppedItem removeItem(int x, int y){
