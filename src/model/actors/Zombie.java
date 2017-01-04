@@ -8,6 +8,7 @@ import util.Utilities;
 
 public class Zombie extends Actor {
 	private final String[] names = { "a decaying corpse", "a zombie", "a rotting zombie" };
+	
 	String name;
 
 	public Zombie(int x, int y) {
@@ -22,19 +23,19 @@ public class Zombie extends Actor {
 	@Override
 	public void act(Game game) {
 		Player p = game.getPlayer();
+
 		if (Point.distance(p.pos, this.pos) <= 1) {
 			p.currentHealth -= 2;
 			Log.add(String.format("%s does 2 damage to you.", Utilities.capitalize(name)));
 		} else {
-			// TODO fix this to look normal
-			if (p.pos.x < pos.x && game.move(this, pos.x - 1, pos.y)) {
-
-			} else if (p.pos.x > pos.x && game.move(this, pos.x + 1, pos.y)) {
-
-			} else if (p.pos.y < pos.y && game.move(this, pos.x, pos.y - 1)) {
-
-			} else if (p.pos.y > pos.y && game.move(this, pos.x, pos.y + 1)) {
-
+			if (p.pos.x < pos.x && game.canMove(this, pos.x - 1, pos.y)) {
+				game.move(this, pos.x - 1, pos.y);
+			} else if (p.pos.x > pos.x && game.canMove(this, pos.x + 1, pos.y)) {
+				game.move(this, pos.x + 1, pos.y);
+			} else if (p.pos.y < pos.y && game.canMove(this, pos.x, pos.y - 1)) {
+				game.move(this, pos.x, pos.y - 1);
+			} else if (p.pos.y > pos.y && game.canMove(this, pos.x, pos.y + 1)) {
+				game.move(this, pos.x, pos.y + 1);
 			}
 		}
 	}

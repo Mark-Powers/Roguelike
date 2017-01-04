@@ -55,22 +55,34 @@ public class Game {
 		} else if (lastKey == KeyBind.ATTACK) {
 			lastKey = -1;
 			return attack(keycode);
-		} else if(lastKey == KeyBind.DROP_ITEM){
+		} else if (lastKey == KeyBind.DROP_ITEM) {
 			lastKey = -1;
 			return dropItem(keycode);
 		} else {
 			switch (keycode) {
 			case KeyBind.LEFT:
-				move(player, player.pos.x - 1, player.pos.y);
+				if (canMove(player, player.pos.x - 1, player.pos.y)) {
+					move(player, player.pos.x - 1, player.pos.y);
+					checkForStairs();
+				}
 				break;
 			case KeyBind.RIGHT:
-				move(player, player.pos.x + 1, player.pos.y);
+				if (canMove(player, player.pos.x + 1, player.pos.y)) {
+					move(player, player.pos.x + 1, player.pos.y);
+					checkForStairs();
+				}
 				break;
 			case KeyBind.UP:
-				move(player, player.pos.x, player.pos.y - 1);
+				if (canMove(player, player.pos.x, player.pos.y - 1)) {
+					move(player, player.pos.x, player.pos.y - 1);
+					checkForStairs();
+				}
 				break;
 			case KeyBind.DOWN:
-				move(player, player.pos.x, player.pos.y + 1);
+				if (canMove(player, player.pos.x, player.pos.y + 1)) {
+					move(player, player.pos.x, player.pos.y + 1);
+					checkForStairs();
+				}
 				break;
 			case KeyBind.ATTACK:
 				if (player.meleeWeapon != null) {
@@ -102,7 +114,7 @@ public class Game {
 				break;
 			case KeyBind.PICK_UP_ITEM:
 				DroppedItem pickedUpItem = currentFloor.removeItem(player.pos.x, player.pos.y);
-				if(pickedUpItem != null){
+				if (pickedUpItem != null) {
 					Log.add(String.format("Picked up a %s.", pickedUpItem.item.getName()));
 					player.addItem(pickedUpItem.item);
 				} else {
@@ -117,9 +129,10 @@ public class Game {
 	}
 
 	private boolean dropItem(int keycode) {
-		int index = KeyBind.getNumberKeyValue(keycode)-1; // - 1 since index starts at 1
+		int index = KeyBind.getNumberKeyValue(keycode) - 1; // - 1 since index
+															// starts at 1
 		String[] inventory = player.getInventory();
-		if(index >= 0 && index < inventory.length){
+		if (index >= 0 && index < inventory.length) {
 			Item dropped = player.dropItem(inventory[index]);
 			currentFloor.addItem(new DroppedItem(dropped, new Point(player.pos.x, player.pos.y)));
 			return true;
@@ -130,10 +143,10 @@ public class Game {
 
 	private void logInventory() {
 		String[] items = player.getInventory();
-		for (int i = items.length-1; i >= 0; i--) {
+		for (int i = items.length - 1; i >= 0; i--) {
 			Log.add(String.format("%d: %s", i + 1, Utilities.capitalize(items[i])));
 		}
-		if(items.length == 0){
+		if (items.length == 0) {
 			Log.add("Your inventory is empty.");
 		}
 	}
@@ -227,32 +240,41 @@ public class Game {
 		return turnComplete;
 	}
 
-	public boolean move(Actor a, int x, int y) {
+	public boolean canMove(Actor a, int x, int y) {
 		if (currentFloor.canMoveToSpace(x, y) && !(x == player.pos.x && y == player.pos.y)) {
-			a.pos.x = x;
-			a.pos.y = y;
-			currentFloor.move(x, y);
-			// TODO, this shouldn't be here, will trigger if enemy goes on steps
-			if (currentFloor.getTile(x, y) == Terrain.STAIR_DOWN) {
-				if (dungeon.nextFloor()) {
-					currentFloor = dungeon.getCurrentFloor();
-					Log.add(String.format("You move down to floor %d", dungeon.getCurrentFloorNumber()));
-				}
-			} else if (currentFloor.getTile(x, y) == Terrain.STAIR_UP) {
-				if (dungeon.prevFloor()) {
-					currentFloor = dungeon.getCurrentFloor();
-					Log.add(String.format("You move up to floor %d", dungeon.getCurrentFloorNumber()));
-				}
-			}
 			return true;
 		}
 		return false;
 	}
 
-	public Player getPlayer(){
+	public boolean move(Actor a, int x, int y) {
+		a.pos.x = x;
+		a.pos.y = y;
+
+		currentFloor.move(x, y);
+
+		return true;
+	}
+
+	public void checkForStairs() {
+		if (currentFloor.getTile(player.pos.x, player.pos.y) == Terrain.STAIR_DOWN) {
+			if (dungeon.nextFloor()) {
+				currentFloor = dungeon.getCurrentFloor();
+				Log.add(String.format("You move down to floor %d", dungeon.getCurrentFloorNumber()));
+			}
+		} else if (currentFloor.getTile(player.pos.x, player.pos.y) == Terrain.STAIR_UP) {
+			if (dungeon.prevFloor()) {
+				currentFloor = dungeon.getCurrentFloor();
+				Log.add(String.format("You move up to floor %d", dungeon.getCurrentFloorNumber()));
+			}
+		}
+
+	}
+
+	public Player getPlayer() {
 		return player;
 	}
-	
+
 	public String toString() {
 		StringBuffer sb = new StringBuffer(currentFloor.toString());
 

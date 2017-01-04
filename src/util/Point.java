@@ -24,4 +24,13 @@ public class Point {
 	public String toString(){
 		return "(" + x + "," + y + ")";
 	}
+	
+	@Override
+	public boolean equals(Object other){
+		if(other instanceof Point){
+			Point o = (Point)other;
+			return o.x == this.x && o.y == this.y; 
+		}
+		return false;
+	}
 }
