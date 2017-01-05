@@ -1,5 +1,8 @@
 package util;
+import java.util.HashMap;
 import java.util.Random;
+
+import model.Stat;
 
 public final class Roll {
 
@@ -27,5 +30,14 @@ public final class Roll {
 			}
 		}
 		return sum - min;
+	}
+	
+	public static HashMap<Stat, Double> fullStats(){
+		HashMap<Stat, Double> stats = new HashMap<Stat, Double>();
+		stats.put(Stat.ATTACK, (double) Roll.stat());
+		stats.put(Stat.CONSTITUTION, (double) Roll.stat());
+		stats.put(Stat.DEFENSE, (double) Roll.stat());
+		stats.put(Stat.DEXTERITY, (double) Roll.stat());
+		return stats;
 	}
 }

@@ -3,6 +3,7 @@ package model.actors;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import gui.EntryType;
 import model.Game;
 import model.Log;
 import model.Stat;
@@ -23,11 +24,7 @@ public class Player extends Actor {
 		super(x, y);		
 		this.name = name;
 		
-		stat = new HashMap<Stat, Double>();
-		stat.put(Stat.ATTACK, (double) Roll.stat());
-		stat.put(Stat.CONSTITUTION, (double) Roll.stat());
-		stat.put(Stat.DEFENSE, (double) Roll.stat());
-		stat.put(Stat.DEXTERITY, (double) Roll.stat());
+		stat = Roll.fullStats();
 		
 		maxHealth = 20;
 		currentHealth = maxHealth;
@@ -53,7 +50,7 @@ public class Player extends Actor {
 	public Item dropItem(String s){
 		for(int i = 0; i < inventory.size(); i++){
 			if(inventory.get(i).getName() == s){
-				Log.add(String.format("You dropped %s.", s));
+				Log.add(String.format("You dropped %s.", s), EntryType.INFO);
 				return inventory.remove(i);
 			}
 		}

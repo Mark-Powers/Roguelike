@@ -1,5 +1,6 @@
 package model;
 
+import gui.EntryType;
 import model.actors.Actor;
 import model.actors.Player;
 import model.items.DroppedItem;
@@ -119,7 +120,7 @@ public class Game {
 			case KeyBind.PICK_UP_ITEM:
 				DroppedItem pickedUpItem = currentFloor.removeItem(player.pos.x, player.pos.y);
 				if (pickedUpItem != null) {
-					Log.add(String.format("Picked up a %s.", pickedUpItem.item.getName()));
+					Log.add(String.format("Picked up a %s.", pickedUpItem.item.getName()), EntryType.INFO);
 					player.addItem(pickedUpItem.item);
 				} else {
 					Log.add("Nothing to pick up.");
@@ -168,6 +169,9 @@ public class Game {
 			case Direction.NORTH:
 				for (int i = player.pos.y - 1; i >= 0; i--) {
 					if(look(player.pos.x, i)){
+						return;
+					}
+					if(currentFloor.isSolid(player.pos.x, i)){
 						break;
 					}
 				}
@@ -175,6 +179,9 @@ public class Game {
 			case Direction.EAST:
 				for (int i = player.pos.x + 1; i < WIDTH; i++) {
 					if(look(i, player.pos.y)){
+						return;
+					}
+					if(currentFloor.isSolid(i, player.pos.y)){
 						break;
 					}
 				}
@@ -182,6 +189,9 @@ public class Game {
 			case Direction.SOUTH:
 				for (int i = player.pos.y + 1; i < WIDTH; i++) {
 					if(look(player.pos.x, i)){
+						return;
+					}
+					if(currentFloor.isSolid(player.pos.x, i)){
 						break;
 					}
 				}
@@ -189,22 +199,32 @@ public class Game {
 			case Direction.WEST:
 				for (int i = player.pos.x - 1; i >= 0; i--) {
 					if(look(i, player.pos.y)){
+						return;
+					}
+					if(currentFloor.isSolid(i, player.pos.y)){
 						break;
 					}
 				}
 				break;
 		}
+		Log.add("You find see nothing interesting.", EntryType.INFO);
 	}
 	
+	/**
+	 * Looks at tile (x, y) and logs if something is there.
+	 * @param x
+	 * @param y
+	 * @return true if something was found
+	 */
 	private boolean look(int x, int y){
 		Actor actorInSight = currentFloor.getActorAt(x, y);
 		if(actorInSight != null){
-			Log.add(String.format("You see %s.", actorInSight.getName()));
+			Log.add(String.format("You see %s.", actorInSight.getName()), EntryType.INFO);
 			return true;
 		}
 		Item itemInSight = currentFloor.getItemAt(x, y);
 		if(itemInSight != null){
-			Log.add(String.format("You see %s.", itemInSight.getName()));
+			Log.add(String.format("You see %s.", itemInSight.getName()), EntryType.INFO);
 			return true;
 		}
 		return false;

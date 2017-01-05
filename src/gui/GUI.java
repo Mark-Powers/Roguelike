@@ -15,6 +15,7 @@ import javax.swing.text.JTextComponent.KeyBinding;
 import model.Game;
 import model.KeyBind;
 import model.Log;
+import model.LogEntry;
 
 public class GUI extends Frame{
 	final int WIDTH = 800;
@@ -61,8 +62,8 @@ public class GUI extends Frame{
 				console.setText(game.toString());
 			}
 		});
-		add(console, BorderLayout.CENTER);
 		console.setText(game.toString());
+		add(console, BorderLayout.CENTER);
 		
 		setVisible(true);
 				 
@@ -96,14 +97,15 @@ public class GUI extends Frame{
 			}
 			
 			// Draws log
-			String[] entries = Log.getLastEntries(LOG_COUNT);
+			LogEntry[] entries = Log.getLastEntries(LOG_COUNT);
 			for(int i = 0; i < entries.length; i++){
-				String s = entries[i];
-				if(s != null){
-					g.drawString(s, 10, 30+lines.length*FONT_SIZE + i*FONT_SIZE);
+				if(entries[i] != null){
+					EntryType.set(entries[i].entryType, g);
+					g.drawString(entries[i].text, 10, 30+lines.length*FONT_SIZE + i*FONT_SIZE);
 				}
 			}
 			// Log outline
+			g.setColor(Color.BLACK);
 			g.drawRect(8, 10+lines.length*FONT_SIZE, width-30, FONT_SIZE*LOG_COUNT+4);
 			
 		}

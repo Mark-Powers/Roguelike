@@ -1,17 +1,24 @@
 package model;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import gui.EntryType;
+
 public class Log {
-	private static List<String> entries = new ArrayList<String>();
+	private static List<LogEntry> entries = new ArrayList<LogEntry>();
 	
 	public static void add(String s){
-		entries.add(s);
+		entries.add(new LogEntry(s, EntryType.NORMAL));
 	}
 	
-	public static String[] getLastEntries(int i){
-		String[] lastEntries = new String[i];
+	public static void add(String s, int entryType){
+		entries.add(new LogEntry(s, entryType));
+	}
+	
+	public static LogEntry[] getLastEntries(int i){
+		LogEntry[] lastEntries = new LogEntry[i];
 		i--;
 		for( ; i >= 0; i--){
 			if(entries.size() > i){

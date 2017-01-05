@@ -1,5 +1,6 @@
 package model.actors;
 
+import gui.EntryType;
 import model.Game;
 import model.Log;
 import util.Point;
@@ -26,7 +27,7 @@ public class Zombie extends Actor {
 
 		if (Point.distance(p.pos, this.pos) <= 1) {
 			p.currentHealth -= 2;
-			Log.add(String.format("%s does 2 damage to you.", Utilities.capitalize(name)));
+			Log.add(String.format("%s does 2 damage to you.", Utilities.capitalize(name)), EntryType.WARN);
 		} else {
 			if (p.pos.x < pos.x && game.canMove(this, pos.x - 1, pos.y)) {
 				game.move(this, pos.x - 1, pos.y);
