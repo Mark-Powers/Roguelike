@@ -1,5 +1,6 @@
 package model.actors;
 
+import model.DamageType;
 import model.Direction;
 import model.Game;
 import util.Roll;
@@ -57,5 +58,11 @@ public class Slime extends Actor {
 	@Override
 	public String getName() {
 		return "a slime";
+	}
+
+	@Override
+	public double getDamage(Actor a, DamageType type) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

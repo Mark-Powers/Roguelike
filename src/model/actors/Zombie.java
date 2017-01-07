@@ -1,6 +1,7 @@
 package model.actors;
 
 import gui.EntryType;
+import model.DamageType;
 import model.Game;
 import model.Log;
 import util.Point;
@@ -26,8 +27,9 @@ public class Zombie extends Actor {
 		Player p = game.getPlayer();
 
 		if (Point.distance(p.pos, this.pos) <= 1) {
-			p.currentHealth -= 2;
-			Log.add(String.format("%s does 2 damage to you.", Utilities.capitalize(name)), EntryType.WARN);
+			
+			p.takeDamage(this, getDamage(p, DamageType.MELEE));
+			//Log.add(String.format("%s does 2 damage to you.", Utilities.capitalize(name)), EntryType.WARN);
 		} else {
 			if (p.pos.x < pos.x && game.canMove(this, pos.x - 1, pos.y)) {
 				game.move(this, pos.x - 1, pos.y);
@@ -53,5 +55,10 @@ public class Zombie extends Actor {
 
 	private String randomName() {
 		return names[Roll.d(names.length) - 1];
+	}
+
+	@Override
+	public double getDamage(Actor a, DamageType type) {
+		return 3;
 	}
 }
