@@ -1,5 +1,6 @@
 package model.actors;
 
+import java.awt.Graphics;
 import java.util.HashMap;
 
 import gui.EntryType;
@@ -56,5 +57,5 @@ public abstract class Actor {
 	 */
 	public abstract String getName();
 
-	public abstract String getChar();
+	public abstract void draw(Graphics g);
 }

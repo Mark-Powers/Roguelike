@@ -1,6 +1,10 @@
 package model.actors;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import gui.EntryType;
+import gui.GUI;
 import model.DamageType;
 import model.Game;
 import model.Log;
@@ -48,10 +52,6 @@ public class Zombie extends Actor {
 		return name;
 	}
 
-	@Override
-	public String getChar() {
-		return "z";
-	}
 
 	private String randomName() {
 		return names[Roll.d(names.length) - 1];
@@ -60,5 +60,11 @@ public class Zombie extends Actor {
 	@Override
 	public double getDamage(Actor a, DamageType type) {
 		return 3;
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		g.setColor(new Color(0, 0, 255));
+		g.fillRect(0, 0, GUI.TILE_WIDTH, GUI.TILE_HEIGHT);
 	}
 }

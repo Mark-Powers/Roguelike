@@ -1,13 +1,14 @@
 package model.actors;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import gui.EntryType;
+import gui.GUI;
 import model.DamageType;
 import model.Game;
 import model.Log;
-import model.Stat;
 import model.items.Item;
 import model.items.MeleeWeapon;
 import model.items.RangeWeapon;
@@ -61,11 +62,6 @@ public class Player extends Actor {
 	}
 
 	@Override
-	public String getChar() {
-		return "@";
-	}
-
-	@Override
 	public void act(Game game) {
 		// Player passive effects here
 	}
@@ -107,5 +103,14 @@ public class Player extends Actor {
 		default:
 			return 0;
 		}
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		System.out.println("Drawing player " + pos.toString());
+		g.translate(GUI.TILE_WIDTH * pos.x, GUI.TILE_HEIGHT * pos.y);
+		g.setColor(Color.RED);
+		g.fillRect(0, 0, GUI.TILE_WIDTH, GUI.TILE_HEIGHT);
+		g.translate(-GUI.TILE_WIDTH * pos.x, -GUI.TILE_HEIGHT * pos.y);
 	}
 }

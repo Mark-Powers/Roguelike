@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Graphics;
+
 import gui.EntryType;
 import model.actors.Actor;
 import model.actors.Player;
@@ -11,8 +13,8 @@ import util.Point;
 import util.Utilities;
 
 public class Game {
-	final int WIDTH = 60;
-	final int HEIGHT = 20;
+	public final static int WIDTH = 30;
+	public final static int HEIGHT = 20;
 	final int startingX = 5;
 	final int startingY = 5;
 
@@ -28,7 +30,7 @@ public class Game {
 		player.addItem(new Potion());
 		player.addItem(new MeleeWeapon("a rusty dagger", 0.2, 2));
 
-		dungeon = new Dungeon(3);
+		dungeon = new Dungeon(3, WIDTH, HEIGHT);
 		currentFloor = dungeon.getCurrentFloor();
 
 		lastKey = -1;
@@ -39,6 +41,7 @@ public class Game {
 	}
 
 	public void tick() {
+		System.out.println("tick");
 		for (Actor a : currentFloor.getActors()) {
 			a.act(this);
 		}
@@ -64,6 +67,7 @@ public class Game {
 			inspect(Direction.keyToDirection(keycode));
 			return false;
 		} else {
+			System.out.println("Moving...");
 			switch (keycode) {
 			case KeyBind.LEFT:
 				if (canMove(player, player.pos.x - 1, player.pos.y)) {
@@ -354,12 +358,8 @@ public class Game {
 		return player;
 	}
 
-	public String toString() {
-		StringBuffer sb = new StringBuffer(currentFloor.toString());
-
-		int index = (WIDTH + 1) * player.pos.y + player.pos.x;
-		sb.replace(index, index + 1, player.getChar());
-
-		return sb.toString();
+	public void draw(Graphics g) {
+		currentFloor.draw(g);
+		player.draw(g);
 	}
 }

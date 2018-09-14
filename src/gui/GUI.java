@@ -18,6 +18,8 @@ import model.Log;
 import model.LogEntry;
 
 public class GUI extends Frame{
+	public final static int TILE_WIDTH = 15;
+	public final static int TILE_HEIGHT = 15;
 	final int WIDTH = 800;
 	final int HEIGHT = 680;
 	final int FONT_SIZE = 20;
@@ -59,10 +61,9 @@ public class GUI extends Frame{
 				if(game.keyEvent(e.getKeyCode())){
 					game.tick();
 				}
-				console.setText(game.toString());
+				console.repaint();
 			}
 		});
-		console.setText(game.toString());
 		add(console, BorderLayout.CENTER);
 		
 		setVisible(true);
@@ -72,41 +73,33 @@ public class GUI extends Frame{
 	class MyCanvas extends Canvas {
 		int width;
 		int height;
-		String text;
 
 		public MyCanvas(int width, int height) {
 			this.width = width;
 			this.height = height;
 			setSize(width, height);
 			setBackground(new Color(224,224,224));
-			text = "";
-		}
-
-		public void setText(String s){
-			text = s;
-			repaint();
 		}
 
 		public void paint(Graphics g) {
-			g.setFont(new Font("Courier New", Font.PLAIN, FONT_SIZE));
-			g.setColor(new Color(16,16,16));
 			//Draws map
-			String[] lines = text.split("\n");
-			for(int i = 0; i < lines.length; i++){
-				g.drawString(lines[i], 10, 15+i*FONT_SIZE);
-			}
+			game.draw(g);
 			
 			// Draws log
+			g.setFont(new Font("FreeMono", Font.PLAIN, FONT_SIZE));
+//			g.setColor(new Color(16,16,16));
 			LogEntry[] entries = Log.getLastEntries(LOG_COUNT);
 			for(int i = 0; i < entries.length; i++){
 				if(entries[i] != null){
 					EntryType.set(entries[i].entryType, g);
-					g.drawString(entries[i].text, 10, 30+lines.length*FONT_SIZE + i*FONT_SIZE);
+					System.out.println("Drawing log" + TILE_HEIGHT + " " + TILE_HEIGHT*(Game.HEIGHT+1));
+					g.drawString(entries[i].text, TILE_HEIGHT, TILE_HEIGHT*(Game.HEIGHT+2+i));
 				}
 			}
+			
 			// Log outline
 			g.setColor(Color.BLACK);
-			g.drawRect(8, 10+lines.length*FONT_SIZE, width-30, FONT_SIZE*LOG_COUNT+4);
+			g.drawRect(TILE_WIDTH, TILE_HEIGHT*(Game.HEIGHT+1), width-30, FONT_SIZE*LOG_COUNT+4);
 			
 		}
 	}

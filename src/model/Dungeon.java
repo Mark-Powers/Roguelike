@@ -4,20 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Dungeon {
-	final int WIDTH = 60;
-	final int HEIGHT = 20;
 	final int startingX = 5;
 	final int startingY = 5;
 	
 	private List<Floor> floors;
 	private int currentFloor;
 	
-	public Dungeon(int floorCount){
+	public Dungeon(int floorCount, int w, int h){
 		floors = new ArrayList<Floor>();
 		currentFloor = 1;
 		
 		for(int i = 0; i < floorCount; i++){
-			floors.add(new Floor(WIDTH, HEIGHT, startingX, startingY));
+			floors.add(new Floor(w, h, startingX, startingY));
 		}
 	}
 	

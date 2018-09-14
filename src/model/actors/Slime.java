@@ -1,5 +1,9 @@
 package model.actors;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
+import gui.GUI;
 import model.DamageType;
 import model.Direction;
 import model.Game;
@@ -14,11 +18,6 @@ public class Slime extends Actor {
 
 		maxHealth = 10;
 		currentHealth = maxHealth;
-	}
-
-	@Override
-	public String getChar() {
-		return "s";
 	}
 
 	@Override
@@ -64,5 +63,11 @@ public class Slime extends Actor {
 	public double getDamage(Actor a, DamageType type) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		g.setColor(new Color(0, 255, 0));
+		g.fillRect(0, 0, GUI.TILE_WIDTH, GUI.TILE_HEIGHT);
 	}
 }
