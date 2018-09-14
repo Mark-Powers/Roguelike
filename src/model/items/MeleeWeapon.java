@@ -1,5 +1,10 @@
 package model.items;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
+import gui.GUI;
+
 public class MeleeWeapon implements Item {
 	protected double accuracy;
 	protected int damage;
@@ -25,7 +30,8 @@ public class MeleeWeapon implements Item {
 	}
 
 	@Override
-	public String getChar() {
-		return "M";
+	public void draw(Graphics g) {
+		g.setColor(Color.ORANGE);
+		g.fillRect(GUI.TILE_WIDTH/3, 0, GUI.TILE_WIDTH/3, GUI.TILE_HEIGHT);
 	}
 }

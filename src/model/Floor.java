@@ -12,6 +12,7 @@ import model.items.DroppedItem;
 import model.items.Item;
 import model.items.MeleeWeapon;
 import model.items.Potion;
+import model.items.RangeWeapon;
 import util.Point;
 import util.Roll;
 
@@ -181,6 +182,7 @@ public class Floor {
 
 		items.add(new DroppedItem(new Potion(), new Point(20, 5)));
 		items.add(new DroppedItem(new MeleeWeapon("a staff", 1, 3), new Point(5, 15)));
+		items.add(new DroppedItem(new RangeWeapon("strong bow", .5, 1, 3), new Point(5, 18)));
 	}
 
 	public void addItem(DroppedItem i) {
@@ -257,7 +259,6 @@ public class Floor {
 		return actors;
 	}
 
-
 	public void draw(Graphics g) {
 		// Draws tiles
 		for (int y = 0; y < height; y++) {
@@ -286,12 +287,16 @@ public class Floor {
 					g.drawRect(0, 0, GUI.TILE_WIDTH, GUI.TILE_HEIGHT);
 					break;
 				case Terrain.STAIR_DOWN:
-					g.setColor(Color.green);
-					g.drawRect(0, 0, GUI.TILE_WIDTH, GUI.TILE_HEIGHT);
+					g.setColor(Color.DARK_GRAY);
+					g.fillRect(0, 0, GUI.TILE_WIDTH, GUI.TILE_HEIGHT);
+					g.setColor(Color.GRAY);
+					g.fillRect(0, GUI.TILE_HEIGHT / 2, GUI.TILE_WIDTH / 2, GUI.TILE_HEIGHT / 2);
+					g.fillRect(GUI.TILE_WIDTH / 2, 0, GUI.TILE_WIDTH / 2, GUI.TILE_HEIGHT);
 					break;
 				case Terrain.STAIR_UP:
-					g.setColor(Color.green);
-					g.drawRect(0, 0, GUI.TILE_WIDTH, GUI.TILE_HEIGHT);
+					g.setColor(Color.GRAY);
+					g.fillRect(0, GUI.TILE_HEIGHT / 2, GUI.TILE_WIDTH / 2, GUI.TILE_HEIGHT / 2);
+					g.fillRect(GUI.TILE_WIDTH / 2, 0, GUI.TILE_WIDTH / 2, GUI.TILE_HEIGHT);
 					break;
 				}
 				g.translate(-GUI.TILE_WIDTH * x, -GUI.TILE_HEIGHT * y);

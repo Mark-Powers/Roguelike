@@ -62,7 +62,7 @@ public class Game {
 		} else if (lastKey == KeyBind.DROP_ITEM) {
 			lastKey = -1;
 			return dropItem(keycode);
-		} else if (lastKey == KeyBind.LOOK){
+		} else if (lastKey == KeyBind.LOOK) {
 			lastKey = -1;
 			inspect(Direction.keyToDirection(keycode));
 			return false;
@@ -133,7 +133,7 @@ public class Game {
 				break;
 			case KeyBind.LOOK:
 				Item atFeet = currentFloor.getItemAt(player.pos.x, player.pos.y);
-				if(atFeet != null){
+				if (atFeet != null) {
 					Log.add(String.format("At your feet lies %s.", atFeet.getName()));
 				}
 				Log.add("Choose a direction to look");
@@ -168,72 +168,73 @@ public class Game {
 		}
 	}
 
-	private void inspect(int direction){
-		switch(direction){
-			case Direction.NORTH:
-				for (int i = player.pos.y - 1; i >= 0; i--) {
-					if(look(player.pos.x, i)){
-						return;
-					}
-					if(currentFloor.isSolid(player.pos.x, i)){
-						break;
-					}
+	private void inspect(int direction) {
+		switch (direction) {
+		case Direction.NORTH:
+			for (int i = player.pos.y - 1; i >= 0; i--) {
+				if (look(player.pos.x, i)) {
+					return;
 				}
-				break;
-			case Direction.EAST:
-				for (int i = player.pos.x + 1; i < WIDTH; i++) {
-					if(look(i, player.pos.y)){
-						return;
-					}
-					if(currentFloor.isSolid(i, player.pos.y)){
-						break;
-					}
+				if (currentFloor.isSolid(player.pos.x, i)) {
+					break;
 				}
-				break;
-			case Direction.SOUTH:
-				for (int i = player.pos.y + 1; i < WIDTH; i++) {
-					if(look(player.pos.x, i)){
-						return;
-					}
-					if(currentFloor.isSolid(player.pos.x, i)){
-						break;
-					}
+			}
+			break;
+		case Direction.EAST:
+			for (int i = player.pos.x + 1; i < WIDTH; i++) {
+				if (look(i, player.pos.y)) {
+					return;
 				}
-				break;
-			case Direction.WEST:
-				for (int i = player.pos.x - 1; i >= 0; i--) {
-					if(look(i, player.pos.y)){
-						return;
-					}
-					if(currentFloor.isSolid(i, player.pos.y)){
-						break;
-					}
+				if (currentFloor.isSolid(i, player.pos.y)) {
+					break;
 				}
-				break;
+			}
+			break;
+		case Direction.SOUTH:
+			for (int i = player.pos.y + 1; i < WIDTH; i++) {
+				if (look(player.pos.x, i)) {
+					return;
+				}
+				if (currentFloor.isSolid(player.pos.x, i)) {
+					break;
+				}
+			}
+			break;
+		case Direction.WEST:
+			for (int i = player.pos.x - 1; i >= 0; i--) {
+				if (look(i, player.pos.y)) {
+					return;
+				}
+				if (currentFloor.isSolid(i, player.pos.y)) {
+					break;
+				}
+			}
+			break;
 		}
 		Log.add("You find see nothing interesting.", EntryType.INFO);
 	}
-	
+
 	/**
 	 * Looks at tile (x, y) and logs if something is there.
+	 * 
 	 * @param x
 	 * @param y
 	 * @return true if something was found
 	 */
-	private boolean look(int x, int y){
+	private boolean look(int x, int y) {
 		Actor actorInSight = currentFloor.getActorAt(x, y);
-		if(actorInSight != null){
+		if (actorInSight != null) {
 			Log.add(String.format("You see %s.", actorInSight.getName()), EntryType.INFO);
 			return true;
 		}
 		Item itemInSight = currentFloor.getItemAt(x, y);
-		if(itemInSight != null){
+		if (itemInSight != null) {
 			Log.add(String.format("You see %s.", itemInSight.getName()), EntryType.INFO);
 			return true;
 		}
 		return false;
 	}
-	
+
 	private boolean rangeAttack(int keycode) {
 		boolean turnComplete = true;
 		Actor target = null;

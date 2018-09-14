@@ -1,5 +1,10 @@
 package model.items;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
+import gui.GUI;
+
 public class RangeWeapon implements Item {
 	protected double accuracy;
 	protected int range;
@@ -31,7 +36,8 @@ public class RangeWeapon implements Item {
 	}
 
 	@Override
-	public String getChar() {
-		return "R";
+	public void draw(Graphics g) {
+		g.setColor(new Color(139, 69, 19));
+		g.fillArc(0, 0, GUI.TILE_WIDTH, GUI.TILE_HEIGHT, 90, 180);
 	}
 }

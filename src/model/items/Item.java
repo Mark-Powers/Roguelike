@@ -1,6 +1,8 @@
 package model.items;
 
+import java.awt.Graphics;
+
 public interface Item {
 	public String getName();
-	public String getChar();
+	public void draw(Graphics g);
 }
