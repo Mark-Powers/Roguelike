@@ -53,12 +53,17 @@ public class Player extends Actor {
 
 	public Item dropItem(String s) {
 		for (int i = 0; i < inventory.size(); i++) {
-			if (inventory.get(i).getName() == s) {
+			if (inventory.get(i).getName().equals(s)) {
 				Log.add(String.format("You dropped %s.", s), EntryType.INFO);
 				return inventory.remove(i);
 			}
 		}
 		return null;
+	}
+	
+	public Item dropItem(int s) {
+		Log.add(String.format("You dropped %s.", inventory.get(s).getName()), EntryType.INFO);
+		return inventory.remove(s);
 	}
 
 	public String getName() {

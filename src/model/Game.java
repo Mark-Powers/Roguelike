@@ -22,10 +22,12 @@ public class Game {
 	final int startingY = 5;
 
 	private Player player;
-	private int lastKey;
+	// Tracks what action player is currently in
+	private int state;
 
 	private Dungeon dungeon;
 	private Floor currentFloor;
+	private int selectedIndex;
 
 	public Game() {
 		player = new Player("Mark", startingX, startingY);
@@ -36,7 +38,8 @@ public class Game {
 		dungeon = new Dungeon(3, WIDTH, HEIGHT);
 		currentFloor = dungeon.getCurrentFloor();
 
-		lastKey = -1;
+		state = -1;
+		selectedIndex = -1;
 	}
 
 	public boolean isPassable(int x, int y) {
@@ -55,17 +58,16 @@ public class Game {
 		if (keycode == KeyBind.CANCEL) {
 			Log.add("Cancelled");
 			turnComplete = false;
-		} else if (lastKey == KeyBind.RANGE) {
-			lastKey = -1;
+		} else if (state == KeyBind.RANGE) {
+			state = -1;
 			return rangeAttack(keycode);
-		} else if (lastKey == KeyBind.ATTACK) {
-			lastKey = -1;
+		} else if (state == KeyBind.ATTACK) {
+			state = -1;
 			return attack(keycode);
-		} else if (lastKey == KeyBind.DROP_ITEM) {
-			lastKey = -1;
+		} else if (state == KeyBind.DROP_ITEM) {
 			return dropItem(keycode);
-		} else if (lastKey == KeyBind.LOOK) {
-			lastKey = -1;
+		} else if (state == KeyBind.LOOK) {
+			state = -1;
 			inspect(Direction.keyToDirection(keycode));
 			return false;
 		} else {
@@ -100,7 +102,7 @@ public class Game {
 					turnComplete = false;
 				} else {
 					Log.add("You have no melee weapon equipped!");
-					lastKey = -1;
+					state = -1;
 					return false;
 				}
 				break;
@@ -110,17 +112,18 @@ public class Game {
 					turnComplete = false;
 				} else {
 					Log.add("You have no ranged weapon equipped!");
-					lastKey = -1;
+					state = -1;
 					return false;
 				}
 				break;
-			case KeyBind.INVENTORY:
-				logInventory();
-				turnComplete = false;
-				break;
+//			case KeyBind.INVENTORY:
+//				logInventory();
+//				turnComplete = false;
+//				break;
 			case KeyBind.DROP_ITEM:
 				Log.add("Choose item to drop");
 				turnComplete = false;
+				selectedIndex = 1;
 				break;
 			case KeyBind.PICK_UP_ITEM:
 				DroppedItem pickedUpItem = currentFloor.removeItem(player.pos.x, player.pos.y);
@@ -142,20 +145,28 @@ public class Game {
 				break;
 			}
 		}
-		lastKey = keycode;
+		state = keycode;
 		return turnComplete;
 	}
 
 	private boolean dropItem(int keycode) {
-		int index = KeyBind.getNumberKeyValue(keycode) - 1; // - 1 since index
-															// starts at 1
-		String[] inventory = player.getInventory();
-		if (index >= 0 && index < inventory.length) {
-			Item dropped = player.dropItem(inventory[index]);
+		switch (keycode) {
+		case KeyBind.UP:
+			if (selectedIndex > 1) {
+				selectedIndex--;
+			}
+			break;
+		case KeyBind.DOWN:
+			if (selectedIndex < player.getInventory().length) {
+				selectedIndex++;
+			}
+			break;
+		case KeyBind.ENTER:
+			Item dropped = player.dropItem(selectedIndex-1);
 			currentFloor.addItem(new DroppedItem(dropped, new Point(player.pos.x, player.pos.y)));
+			state = -1;
 			return true;
 		}
-		Log.add("Invalid item number");
 		return false;
 	}
 
@@ -395,8 +406,8 @@ public class Game {
 		hudY += GUI.TILE_HEIGHT;
 		g.drawString(player.meleeWeapon.getName(), hudX + GUI.TILE_WIDTH, hudY);
 		hudY += GUI.TILE_HEIGHT;
-		g.drawString(player.meleeWeapon.getDamage() + "/" + (player.meleeWeapon.getAccuracy()*100) + "%", hudX + GUI.TILE_WIDTH,
-				hudY);
+		g.drawString(player.meleeWeapon.getDamage() + "/" + (player.meleeWeapon.getAccuracy() * 100) + "%",
+				hudX + GUI.TILE_WIDTH, hudY);
 		// Range
 		g.translate(hudX, hudY);
 		player.rangeWeapon.draw(g);
@@ -405,7 +416,7 @@ public class Game {
 		hudY += GUI.TILE_HEIGHT;
 		g.drawString(player.rangeWeapon.getName(), hudX + GUI.TILE_WIDTH, hudY);
 		hudY += GUI.TILE_HEIGHT;
-		g.drawString(player.rangeWeapon.getDamage() + "/" + (player.rangeWeapon.getAccuracy()*100) + "%" + "/"
+		g.drawString(player.rangeWeapon.getDamage() + "/" + (player.rangeWeapon.getAccuracy() * 100) + "%" + "/"
 				+ player.rangeWeapon.getRange(), hudX + GUI.TILE_WIDTH, hudY);
 
 		hudY += GUI.TILE_HEIGHT;
@@ -415,6 +426,12 @@ public class Game {
 			g.translate(hudX + GUI.TILE_WIDTH, hudY);
 			i.draw(g);
 			g.translate(-(hudX + GUI.TILE_WIDTH), -hudY);
+			
+			if (state == KeyBind.DROP_ITEM && selectedIndex == index) {
+				g.setColor(Color.red);
+				g.drawRect(hudX, hudY, GUI.WIDTH - (GUI.TILE_WIDTH * (WIDTH + 3)), GUI.TILE_HEIGHT);
+			}
+			
 			g.setColor(Color.GRAY);
 			hudY += GUI.TILE_HEIGHT;
 			g.drawString(index++ + ":", hudX, hudY);

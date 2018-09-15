@@ -24,4 +24,5 @@ public class KeyBind {
 	}
 	
 	public static final int CANCEL = 27; // esc
+	public static final int ENTER = 10;
 }

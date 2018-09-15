@@ -84,12 +84,10 @@ public class GUI extends Frame {
 
 			// Draws log
 			g.setFont(new Font("FreeMono", Font.PLAIN, FONT_SIZE));
-//			g.setColor(new Color(16,16,16));
 			LogEntry[] entries = Log.getLastEntries(LOG_COUNT);
 			for (int i = 0; i < entries.length; i++) {
 				if (entries[i] != null) {
 					EntryType.set(entries[i].entryType, g);
-//					System.out.println("Drawing log" + TILE_HEIGHT + " " + TILE_HEIGHT * (Game.HEIGHT + 1));
 					g.drawString(entries[i].text, TILE_HEIGHT, TILE_HEIGHT * (Game.HEIGHT + 2 + i));
 				}
 			}
