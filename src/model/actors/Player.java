@@ -42,6 +42,10 @@ public class Player extends Actor {
 		}
 		return items;
 	}
+	
+	public ArrayList<Item> getInventoryItems() {
+		return new ArrayList<Item>(inventory);
+	}
 
 	public void addItem(Item i) {
 		inventory.add(i);
@@ -107,7 +111,6 @@ public class Player extends Actor {
 
 	@Override
 	public void draw(Graphics g) {
-		System.out.println("Drawing player " + pos.toString());
 		g.translate(GUI.TILE_WIDTH * pos.x, GUI.TILE_HEIGHT * pos.y);
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, GUI.TILE_WIDTH, GUI.TILE_HEIGHT);

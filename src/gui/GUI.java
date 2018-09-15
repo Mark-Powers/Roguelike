@@ -18,8 +18,8 @@ import model.LogEntry;
 public class GUI extends Frame {
 	public final static int TILE_WIDTH = 18;
 	public final static int TILE_HEIGHT = 18;
-	final int WIDTH = 800;
-	final int HEIGHT = 680;
+	public final static int WIDTH = 800;
+	public final static int HEIGHT = 680;
 	final int FONT_SIZE = 20;
 	final int LOG_COUNT = 10;
 
@@ -89,7 +89,7 @@ public class GUI extends Frame {
 			for (int i = 0; i < entries.length; i++) {
 				if (entries[i] != null) {
 					EntryType.set(entries[i].entryType, g);
-					System.out.println("Drawing log" + TILE_HEIGHT + " " + TILE_HEIGHT * (Game.HEIGHT + 1));
+//					System.out.println("Drawing log" + TILE_HEIGHT + " " + TILE_HEIGHT * (Game.HEIGHT + 1));
 					g.drawString(entries[i].text, TILE_HEIGHT, TILE_HEIGHT * (Game.HEIGHT + 2 + i));
 				}
 			}

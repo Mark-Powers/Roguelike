@@ -1,8 +1,11 @@
 package model;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import gui.EntryType;
+import gui.GUI;
 import model.actors.Actor;
 import model.actors.Player;
 import model.items.DroppedItem;
@@ -41,7 +44,6 @@ public class Game {
 	}
 
 	public void tick() {
-		System.out.println("tick");
 		for (Actor a : currentFloor.getActors()) {
 			a.act(this);
 		}
@@ -67,7 +69,6 @@ public class Game {
 			inspect(Direction.keyToDirection(keycode));
 			return false;
 		} else {
-			System.out.println("Moving...");
 			switch (keycode) {
 			case KeyBind.LEFT:
 				if (canMove(player, player.pos.x - 1, player.pos.y)) {
@@ -362,5 +363,62 @@ public class Game {
 	public void draw(Graphics g) {
 		currentFloor.draw(g);
 		player.draw(g);
+
+		// Draw HUD
+		int hudX = GUI.TILE_WIDTH * (Game.WIDTH + 1);
+		int hudY = 0;
+		g.setColor(Color.GRAY);
+		// TOP
+		g.fillRect(hudX, hudY, GUI.WIDTH - (GUI.TILE_WIDTH * (WIDTH + 1)), GUI.TILE_HEIGHT);
+		// BOTTOM
+		g.fillRect(hudX, hudY + GUI.TILE_HEIGHT * (HEIGHT - 1), GUI.WIDTH - (GUI.TILE_WIDTH * (WIDTH + 1)),
+				GUI.TILE_HEIGHT);
+		// RIGHT
+		g.fillRect(hudX + GUI.WIDTH - (GUI.TILE_WIDTH * (WIDTH + 2)), hudY, GUI.TILE_WIDTH, GUI.TILE_HEIGHT * HEIGHT);
+		// LEFT
+		g.fillRect(hudX, hudY, GUI.TILE_WIDTH, GUI.TILE_HEIGHT * HEIGHT);
+
+		hudX += GUI.TILE_WIDTH + 1;
+		hudY += 2 * GUI.TILE_HEIGHT;
+		g.setFont(new Font("FreeMono", Font.PLAIN, GUI.TILE_HEIGHT));
+		g.drawString(player.getName(), hudX, hudY);
+		hudY += GUI.TILE_HEIGHT;
+		g.drawString("HP: " + player.getCurrentHealth() + "/" + player.getMaxHealth(), hudX, hudY);
+
+		hudY += GUI.TILE_HEIGHT;
+		g.drawString("Equipment:", hudX, hudY);
+		// Melee
+		g.translate(hudX, hudY);
+		player.meleeWeapon.draw(g);
+		g.translate(-(hudX), -hudY);
+		g.setColor(Color.GRAY);
+		hudY += GUI.TILE_HEIGHT;
+		g.drawString(player.meleeWeapon.getName(), hudX + GUI.TILE_WIDTH, hudY);
+		hudY += GUI.TILE_HEIGHT;
+		g.drawString(player.meleeWeapon.getDamage() + "/" + (player.meleeWeapon.getAccuracy()*100) + "%", hudX + GUI.TILE_WIDTH,
+				hudY);
+		// Range
+		g.translate(hudX, hudY);
+		player.rangeWeapon.draw(g);
+		g.translate(-(hudX), -hudY);
+		g.setColor(Color.GRAY);
+		hudY += GUI.TILE_HEIGHT;
+		g.drawString(player.rangeWeapon.getName(), hudX + GUI.TILE_WIDTH, hudY);
+		hudY += GUI.TILE_HEIGHT;
+		g.drawString(player.rangeWeapon.getDamage() + "/" + (player.rangeWeapon.getAccuracy()*100) + "%" + "/"
+				+ player.rangeWeapon.getRange(), hudX + GUI.TILE_WIDTH, hudY);
+
+		hudY += GUI.TILE_HEIGHT;
+		g.drawString("Inventory:", hudX, hudY);
+		int index = 1;
+		for (Item i : player.getInventoryItems()) {
+			g.translate(hudX + GUI.TILE_WIDTH, hudY);
+			i.draw(g);
+			g.translate(-(hudX + GUI.TILE_WIDTH), -hudY);
+			g.setColor(Color.GRAY);
+			hudY += GUI.TILE_HEIGHT;
+			g.drawString(index++ + ":", hudX, hudY);
+			g.drawString(i.getName(), hudX + GUI.TILE_WIDTH * 2, hudY);
+		}
 	}
 }

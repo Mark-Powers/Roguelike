@@ -2,7 +2,9 @@ package model.items;
 
 import java.awt.Graphics;
 
-public interface Item {
+import model.Drawable;
+
+public interface Item extends Drawable {
 	public String getName();
 	public void draw(Graphics g);
 }

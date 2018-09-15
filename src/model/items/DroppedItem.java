@@ -2,9 +2,10 @@ package model.items;
 
 import java.awt.Graphics;
 
+import model.Drawable;
 import util.Point;
 
-public class DroppedItem {
+public class DroppedItem implements Drawable {
 	public Item item;
 	public Point pos;
 
@@ -13,6 +14,7 @@ public class DroppedItem {
 		pos = p;
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		item.draw(g);
 	}
