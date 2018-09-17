@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import gui.GUI;
 import model.actors.Actor;
+import model.actors.Clops;
 import model.actors.Slime;
 import model.actors.Zombie;
 import model.items.DroppedItem;
@@ -179,6 +180,7 @@ public class Floor {
 		actors.add(new Slime(10, 10));
 		actors.add(new Slime(15, 10));
 		actors.add(new Zombie(15, 8));
+		actors.add(new Clops(15, 15));
 
 		items.add(new DroppedItem(new Potion(), new Point(20, 5)));
 		items.add(new DroppedItem(new MeleeWeapon("a staff", 1, 3), new Point(5, 15)));
@@ -187,6 +189,10 @@ public class Floor {
 
 	public void addItem(DroppedItem i) {
 		items.add(i);
+	}
+	
+	public void addActor(Actor a) {
+		actors.add(a);
 	}
 
 	public Item getItemAt(int x, int y) {

@@ -3,6 +3,7 @@ package model;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.Iterator;
 
 import gui.EntryType;
 import gui.GUI;
@@ -41,13 +42,18 @@ public class Game {
 		state = -1;
 		selectedIndex = -1;
 	}
+	
+	public Floor getCurrentFloor() {
+		return currentFloor;
+	}
 
 	public boolean isPassable(int x, int y) {
 		return currentFloor.isPassable(x, y);
 	}
 
 	public void tick() {
-		for (Actor a : currentFloor.getActors()) {
+		for(int i = 0; i < currentFloor.getActors().size(); i++) {
+			Actor a = currentFloor.getActors().get(i);
 			a.act(this);
 		}
 	}
@@ -162,7 +168,7 @@ public class Game {
 			}
 			break;
 		case KeyBind.ENTER:
-			Item dropped = player.dropItem(selectedIndex-1);
+			Item dropped = player.dropItem(selectedIndex - 1);
 			currentFloor.addItem(new DroppedItem(dropped, new Point(player.pos.x, player.pos.y)));
 			state = -1;
 			return true;
@@ -426,12 +432,12 @@ public class Game {
 			g.translate(hudX + GUI.TILE_WIDTH, hudY);
 			i.draw(g);
 			g.translate(-(hudX + GUI.TILE_WIDTH), -hudY);
-			
+
 			if (state == KeyBind.DROP_ITEM && selectedIndex == index) {
 				g.setColor(Color.red);
 				g.drawRect(hudX, hudY, GUI.WIDTH - (GUI.TILE_WIDTH * (WIDTH + 3)), GUI.TILE_HEIGHT);
 			}
-			
+
 			g.setColor(Color.GRAY);
 			hudY += GUI.TILE_HEIGHT;
 			g.drawString(index++ + ":", hudX, hudY);
